@@ -1,2 +1,2 @@
-# video-dubbing
-Dubbing english videos into russian.
+# Video Dubbing
+![](./readme_files/Pipeline.png)
