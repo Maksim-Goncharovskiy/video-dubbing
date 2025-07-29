@@ -1,24 +1,10 @@
-from abc import ABCMeta, abstractmethod
-
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, pipeline
 
-from .segment import Segment
+from video_dubbing.core import ProcessingContext, DubbingSegment
+from video_dubbing.core import MTProcessor
 
 
-
-class MTPipeline(metaclass=ABCMeta):
-    @abstractmethod
-    def _process_sample(self, text_en: str) -> str:
-        pass
-
-
-    @abstractmethod
-    def __call__(self, texts_en: list[Segment]) -> list[Segment]:
-        pass
-
-
-
-class HelsinkiEnRuPipeline(MTPipeline):
+class HelsinkiEnRuProcessor(MTProcessor):
     def __init__(self, model_path: str | None = None, device: str = 'cpu'):
         model = None
         tokenizer = None 
@@ -37,10 +23,13 @@ class HelsinkiEnRuPipeline(MTPipeline):
             tokenizer=tokenizer,
             device=device)
 
+
     def _process_sample(self, text_en: str) -> str:
         return self.pipe(text_en)[0]['translation_text']
 
 
-    def __call__(self, segments: list[Segment]):
-        for segment in segments:
+    def __call__(self, context: ProcessingContext) -> ProcessingContext:
+        for segment in context.segments:
             segment.translation = self._process_sample(segment.transcription)
+        
+        return context

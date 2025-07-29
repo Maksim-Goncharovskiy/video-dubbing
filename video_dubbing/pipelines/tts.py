@@ -1,30 +1,14 @@
 import os
-from abc import ABCMeta, abstractmethod
-
-import torch 
-import numpy as np
-
 import soundfile as sf
+import numpy as np
+import torch 
 from TTS.api import TTS
-
-from .segment import Segment
-
-
-class TTSPipeline(metaclass=ABCMeta):
-    @abstractmethod
-    def _process_sample(self, audio: str) -> np.ndarray:
-        pass
-    
-
-    @abstractmethod
-    def __call__(self, texts_ru: list[Segment], *args, **kwargs) -> list[Segment]:
-        pass
+from video_dubbing.core import ProcessingContext, DubbingSegment
+from video_dubbing.core import TTSProcessor
 
 
-
-
-class XTTSPipeline(TTSPipeline):
-    output_sampling_rate = 24_000
+class XTTSProcessor(TTSProcessor):
+    output_sample_rate = 24_000
 
     def __init__(self, target_spk: str | None = None, model_path: str | None = None, device: str = 'cpu', temp_dir="./temp-dir/tts/"):
         self.target_spk = target_spk
@@ -41,10 +25,10 @@ class XTTSPipeline(TTSPipeline):
         return self.model.tts(text=text_ru, speaker_wav=speaker_wav, language='ru')
 
 
-    def __call__(self, segments: list[Segment]) -> list[Segment]:
+    def __call__(self, context: ProcessingContext) -> ProcessingContext:
         os.makedirs(self.temp_dir, exist_ok=True)
 
-        for i, segment in enumerate(segments):
+        for i, segment in enumerate(context.segments):
             if self.target_spk is None:
                 audio_path = self.temp_dir + f"{i}.wav"
 
@@ -56,14 +40,14 @@ class XTTSPipeline(TTSPipeline):
             else:
                 segment.tts_wav = self._process_sample(segment.translation, self.target_spk)
 
-        return segments
+        return context
 
 
 
-class SileroTTSPipeline(TTSPipeline):
-    output_sampling_rate = 48_000
+class SileroTTSProcessor(TTSProcessor):
+    output_sample_rate = 48_000
 
-    def __init__(self, model_path: str | None = None, device: str = 'cpu'):
+    def __init__(self, model_path: str | None = None, device: str = 'cpu', speaker: str = "xenia"):
         if model_path:
             self.silero_tts, _ = torch.hub.load(repo_or_dir=model_path,
                                      model='silero_tts',
@@ -80,13 +64,16 @@ class SileroTTSPipeline(TTSPipeline):
         
         self.silero_tts.to(device)
 
+        self.speaker = speaker
+
 
     def _process_sample(self, text_ru: str, speaker: str) -> np.ndarray:
         return self.silero_tts.apply_tts(text=text_ru,
                         speaker=speaker,
-                        sample_rate=self.output_sampling_rate).numpy()
+                        sample_rate=self.output_sample_rate).numpy()
 
 
-    def __call__(self, segments: list[Segment], speaker: str = "xenia"):
-        for segment in segments:
-            segment.tts_wav = self._process_sample(segment.translation, speaker)
+    def __call__(self, context: ProcessingContext) -> ProcessingContext:
+        for segment in context.segments:
+            segment.tts_wav = self._process_sample(segment.translation, self.speaker)
+        return context

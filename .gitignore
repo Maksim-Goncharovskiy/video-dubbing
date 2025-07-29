@@ -5,3 +5,5 @@
 outputs/
 test-videos/
 ref_audios/
+
+*.egg-info/

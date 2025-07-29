@@ -1,1 +1,1 @@
-from asr import FasterWhisperPipeline
+from .video_dubber import VideoDubber
