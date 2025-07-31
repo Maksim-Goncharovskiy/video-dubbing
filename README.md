@@ -21,3 +21,11 @@ pip install -r requirements.txt
 ```bash
 pip install -e .
 ```
+
+## To do
+- [ ] Logging ✍️
+- [ ] Reading and processing configs 📚
+- [ ] Batch processing ⬆️
+- [ ] Diarization for multi-speaker dubbing
+- [ ] OpenAI API for high quality translation 
+- [ ] OpenAI API for processing transcription before translation (numbers -> words)
