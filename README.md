@@ -22,6 +22,14 @@ root/
 	└── video_dubber.py  # API for video dubbing
 ```
 
+## Output examples
+| Original (english)                                                              | Voice Cloning (XTTS-v2)                                                         | SileroTTS (xenia)                                                               |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| <video src=https://github.com/user-attachments/assets/15be4daa-3d86-417c-8638-fc021a21a97d> | <video src=https://github.com/user-attachments/assets/ba071859-b7f6-4aba-b81b-837dd01dd76c> | |
+
+
+
+
 ## Dev mode instruction
 1. Clone repository
 ```bash
