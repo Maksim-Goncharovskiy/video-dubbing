@@ -1,54 +1,58 @@
-from video_dubbing.pipelines import SileroTTSProcessor, FasterWhisperProcessor, SileroVADProcessor, HelsinkiEnRuProcessor
+import os
+import yaml
 from dataclasses import dataclass, field
+from importlib import resources
+from typing import Dict, Any
+
+import video_dubbing.pipelines
+from video_dubbing.pipelines import *
+
+
 
 @dataclass
 class ProcessorConfig:
     stage: str = field(repr=True)
     model: type = field(repr=True)
-    params: dict = field(repr=True)
+    params: Dict[str, Any] = field(repr=True)
 
 
-cpu_config = {
-    "pipeline": [
-        ProcessorConfig(
-            stage="vad",
-            model=SileroVADProcessor,
-            params={
-                "model_path": "/home/maksim/Models/SileroVAD/snakers4-silero-vad", 
-                "threshold": 0.5,  
-                "min_silence_duration_ms": 1000, 
-                "min_speech_duration_ms": 1000
-            }
-        ),
-        ProcessorConfig(
-            stage="asr",
-            model=FasterWhisperProcessor,
-            params={
-                "model_size_or_path": "/home/maksim/Models/FasterWhisper/tiny-en", 
-                "device": "cpu", 
-                "compute_type": "int8"
-            }
-        ), 
-        ProcessorConfig(
-            stage="mt",
-            model=HelsinkiEnRuProcessor,
-            params={
-                "model_path": "/home/maksim/Models/OpusEnRu", 
-                "device": 'cpu'
-            }
-        ),  
-        ProcessorConfig(
-            stage="tts",
-            model=SileroTTSProcessor,
-            params={
-                "model_path": "/home/maksim/Models/SileroModels", 
-                "device": 'cpu', 
-                "speaker": "xenia"
-            }
-        )
-    ],
-    "temp-dir": "./video-dubbing-temp-dir"}
+
+def load_config(config_path: str) -> Dict[str, ProcessorConfig]:
+    with open(config_path, 'r', encoding='utf-8') as f:
+        yaml_data = yaml.safe_load(f)
+    
+    pipeline = []
+    for processor_data in yaml_data['pipeline']:
+        model_class = getattr(video_dubbing.pipelines, processor_data['model']) 
+        
+        pipeline.append(
+            ProcessorConfig(
+                stage=processor_data['stage'],
+                model=model_class,
+                params=processor_data['params']
+            ))
+    
+    return {
+        'pipeline': pipeline,
+        'temp-dir': yaml_data['temp-dir']
+    }
 
 
-def load_config():
-    pass 
+
+def get_default_config(config_name: str) -> str:
+    try:
+        with resources.path("video_dubbing.configs", config_name) as config_path:
+            return str(config_path)
+    except:
+        package_dir = os.path.dirname(os.path.dirname(__file__))
+        return os.path.join(package_dir, "configs", config_name)
+
+
+
+CPU_CONFIG_PATH = get_default_config("cpu_config.yaml")
+GPU_CONFIG_PATH = get_default_config("gpu_config.yaml")
+
+
+
+cpu_config = load_config(CPU_CONFIG_PATH)
+gpu_config = load_config(GPU_CONFIG_PATH)

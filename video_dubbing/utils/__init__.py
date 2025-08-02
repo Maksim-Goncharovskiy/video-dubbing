@@ -1,1 +1,1 @@
-from .config import cpu_config
+from .config import load_config, cpu_config, gpu_config
