@@ -31,7 +31,7 @@ The project consists of two parts:
 
 ## To do
 - [ ] Logging ✍️
-- [ ] Reading and processing configs 📚
+- [X] Reading and processing configs 📚
 - [ ] Batch processing ⬆️
 - [ ] Diarization for multi-speaker dubbing
 - [ ] OpenAI API for high quality translation 
