@@ -1,5 +1,6 @@
 # Video Dubbing
-![](./readme_files/Pipeline.png)
+<img width="1358" height="434" alt="Pipeline" src="https://github.com/user-attachments/assets/3854f386-e4a0-40c6-ae90-2f0c526c6a39" />
+
 
 ## To do
 - [ ] Logging ✍️
