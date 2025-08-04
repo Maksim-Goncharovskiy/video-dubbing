@@ -24,8 +24,9 @@ The project consists of two parts:
 ### Output examples
 | Original (english)                                                              | Voice Cloning (XTTS-v2)                                                         | SileroTTS (xenia)                                                               |
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| <video src=https://github.com/user-attachments/assets/15be4daa-3d86-417c-8638-fc021a21a97d> | <video src=https://github.com/user-attachments/assets/ba071859-b7f6-4aba-b81b-837dd01dd76c> | <video src=https://github.com/user-attachments/assets/d420c94e-aa70-4a29-b9b6-c026d39689c4> |
+| <video src=https://github.com/user-attachments/assets/15be4daa-3d86-417c-8638-fc021a21a97d> | <video src=https://github.com/user-attachments/assets/ba071859-b7f6-4aba-b81b-837dd01dd76c> | <video src=https://github.com/user-attachments/assets/023d221e-8e8c-4bf2-8217-f73ad232c0d8> |
 | <video src=https://github.com/user-attachments/assets/ce14f88f-2c64-46fc-a60c-f649698a39f5> | <video src=https://github.com/user-attachments/assets/97376eed-2fdf-4f3f-8710-04146243d709> | <video src=https://github.com/user-attachments/assets/9f971d95-6143-4dcc-aed1-ca77fc0ff316> |
+
 
 
 ## To do
