@@ -60,7 +60,8 @@ class SileroTTSProcessor(TTSProcessor):
                                      model='silero_tts',
                                      language='ru',
                                      speaker='v4_ru',
-                                     source='github')
+                                     source='github',
+                                     trust_repo=True)
         
         self.silero_tts.to(device)
 

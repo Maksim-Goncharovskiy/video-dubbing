@@ -22,7 +22,8 @@ class SileroVADProcessor(VADProcessor):
             self.silerovad, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
                                 model='silero_vad',
                                 force_reload=True, 
-                                source='github') 
+                                source='github', 
+                                trust_repo=True) 
 
         (self.get_speech_timestamps, _, _, _, _) = utils
 

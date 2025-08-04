@@ -5,7 +5,7 @@ import uuid
 import streamlit as st
 
 from video_dubbing import VideoDubber
-from video_dubbing.utils import cpu_config
+from video_dubbing.utils import cpu_config, gpu_config
 
 
 UPLOAD_DIR = "uploads"
